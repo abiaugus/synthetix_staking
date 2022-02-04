@@ -2,19 +2,6 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("StakingRewards", function () {
-  // it("Should return the new greeting once it's changed", async function () {
-  //   const Greeter = await ethers.getContractFactory("Greeter");
-  //   const greeter = await Greeter.deploy("Hello, world!");
-  //   await greeter.deployed();
-
-  //   expect(await greeter.greet()).to.equal("Hello, world!");
-
-  //   const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
-
-  //   // wait until the transaction is mined
-  //   await setGreetingTx.wait();
-
-  //   expect(await greeter.greet()).to.equal("Hola, mundo!");
   let StakingRewards;
   let stakingRewards;
   let StakingToken;
@@ -31,6 +18,9 @@ describe("StakingRewards", function () {
 
     StakingToken = await ethers.getContractFactory("StakingToken");
     stakingToken = await StakingToken.deploy();
+
+    RewardsToken = await ethers.getContractFactory("RewardToken");
+    rewardsToken = await RewardsToken.deploy();
 
   })
 
@@ -59,6 +49,30 @@ describe("StakingRewards", function () {
       const balance = await stakingToken.balanceOf(signers[1].address);
       expect(balance).to.equal("1000");
     })
+    it("can transfer 1000 RTN tokens to user", async () => {
+      await rewardsToken.deployed();
+      await rewardsToken.transfer(signers[1].address, "1000");
+      const balance = await rewardsToken.balanceOf(signers[1].address);
+      expect(balance).to.equal("1000");
+    })
+
   })
+  describe("Approvals", async() => {
+    it("can approve spending STN Tokens", async () => {
+      await stakingToken.deployed();
+      await stakingToken.approve(signers[1].address, "1000");
+      const allowance = await stakingToken.allowance(signers[0].address, signers[1].address);
+      expect(allowance).to.equal("1000");
+      
+
+    })
+  });
+  
+  // describe("Staking Tokens", async () => {
+  //   it("can stake STN Tokens", async () => {
+  //     await stakingToken.deployed();
+
+  //   })
+  // })
 
 });
