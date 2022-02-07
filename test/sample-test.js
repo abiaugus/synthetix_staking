@@ -10,7 +10,7 @@ describe("StakingRewards", function () {
   let rewardsToken;
   let signers;
 
-  beforeEach( async() => {
+  before( async() => {
     signers = await ethers.getSigners();
 
     StakingRewards = await ethers.getContractFactory("StakingRewards");
@@ -63,16 +63,44 @@ describe("StakingRewards", function () {
       await stakingToken.approve(signers[1].address, "1000");
       const allowance = await stakingToken.allowance(signers[0].address, signers[1].address);
       expect(allowance).to.equal("1000");
-      
 
     })
   });
   
-  // describe("Staking Tokens", async () => {
-  //   it("can stake STN Tokens", async () => {
-  //     await stakingToken.deployed();
+  describe("Staking Tokens", async () => {
+    it("can stake STN Tokens", async () => {
+      await stakingToken.deployed();
+      await stakingRewards.deployed();
+      // console.log("address is", stakingToken.address);
+      await stakingToken.approve(signers[1].address, "1000");
+      await stakingToken.transfer(signers[1].address, "1000");
+      await stakingToken.connect(signers[1]).approve(stakingRewards.address, "1000");
+      await stakingToken.transfer(signers[1].address, "1000");
+      const dummy = await stakingRewards.connect(signers[1]).stake("1");
+      console.log(stakingRewards);
+      // console.log("Dummy", dummy);
 
-  //   })
-  // })
+      // const result = await stakingRewards.connect(signers[1]).stake("100");
+      // console.log(signers[1].address);
+      // console.log(result);      
+
+    })
+  })
 
 });
+
+/*
+
+Steps followed in Remix
+
+1. Approve account1 from StakingToken contract using approve(). called by owner(account0)
+2. Transfer 1000 STN from owner to account1.
+3. Check allowance of account1 by calling allowance.
+4. Switch to account1, and approve StakingRewards Contract for 1000 STN
+5. Check allowance of StakingRewards by calling allowance(owner=account1, spender=StakingRewards)
+6. Create Stake. Works.
+
+
+*/
+
+

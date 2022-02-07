@@ -15,7 +15,9 @@ async function main() {
 
   // We get the contract to deploy
   const StakingRewards = await hre.ethers.getContractFactory("StakingRewards");
-  const stakingRewards = await StakingRewards.deploy("0x5FbDB2315678afecb367f032d93F642f64180aa3","0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512");
+  // const stakingRewards = await StakingRewards.deploy("0x5FbDB2315678afecb367f032d93F642f64180aa3","0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512");
+  const stakingRewards = await StakingRewards.deploy("0xF373BeF9a4F9AE4e101349477e348A700Bca90Db","0xcC3f60e63a3d4D7EDec43d7558301912050ee6C9");
+
 
   await stakingRewards.deployed();
 
